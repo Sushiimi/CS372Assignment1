@@ -2,11 +2,14 @@
 ***************************************************
 *
 *  Ian Johnson -- 2/7/2018 -- CS372 Algorithms
+*
 *  this program determine the runtime for both
 *  algorithms meant to find a given index of the
 *  fibonacci sequence (i.e. n = 3, find the 3rd
 *  fibonacci number) and the print the runtimes
-*  for both algorithms for comparison
+*  for both algorithms for comparison.
+*  Also calculates and prints out the maximum 
+*  n-value that each algorithm can run in < 10 ms
 *
 ***************************************************
 */
@@ -18,7 +21,7 @@ import java.lang.*;
 
 public class algotesting {
 
-// recursive exponetial algorithm for fibonacci
+// exponetial algorithm for fibonacci
 	public static int fib1( int n ) {
 		// base cases
 		if ( n == 0 )
@@ -30,7 +33,7 @@ public class algotesting {
 		return fib1( n - 1 ) - fib1( n - 2 );
 	}// end fib1
 
-// iterative polynomial algorithm for fibonacci
+// polynomial algorithm for fibonacci
 	public static int fib2( int n ) {
 		// base case
 		if ( n == 0 )
@@ -48,8 +51,9 @@ public class algotesting {
 // main function
 	public static void main( String args[] ) {
 		// vars and objs
+		int fib1testVal = 0, fib2testVal = 0;
 		int inputVals[] = new int[10];
-		long startTime = 0;
+		long startTime = 0, testTime = 0;
 		long fib1RunTimes[] = new long[10];
 		long fib2RunTimes[] = new long[10];
 		Scanner scan = new Scanner( System.in );
@@ -67,7 +71,6 @@ public class algotesting {
 			startTime = System.nanoTime();
 			fib1( inputVals[j] );
 			fib1RunTimes[j] = System.nanoTime() - startTime;
-			startTime = 0;
 			startTime = System.nanoTime();
 			fib2( inputVals[j] );
 			fib2RunTimes[j] = System.nanoTime() - startTime;
@@ -83,10 +86,37 @@ public class algotesting {
 		for ( int k = 0; k < inputVals.length; k++ )
 	    	System.out.printf("|     %-3d   |  %-,24d|  %-,24d|\n", 
 	    		               inputVals[k], fib1RunTimes[k], fib2RunTimes[k]);
-		System.out.println("|=================================================================|");
 
-		// run the algorithms to determine the max n for fib1 and 
-		// fib2 to finish in < 10 milliseconds 
+		// run the algorithms to determine the max n for fib1 
+		// to finish in < 10 milliseconds
+		while( testTime <= 10 )
+		{
+			testTime = System.currentTimeMillis();
+			fib1( fib1testVal );
+			fib1testVal++;
+			testTime = System.currentTimeMillis() - testTime;
+		}
+		System.out.println("|=================================================================|");
+		System.out.println("|                                                                 |");
+		System.out.printf("| Maximum n-value for fib1 w/ runtime < 10ms: %-20d|\n", fib1testVal);
+		System.out.println("|                                                                 |");
+		System.out.println("|=================================================================|");
+		System.out.println("|                                                                 |");
+
+		// do the same as above for the fib2 algorithm
+		testTime = 0; 
+		while( testTime <= 10 )
+		{
+			testTime = System.currentTimeMillis();
+			fib2( fib2testVal );
+			fib2testVal++;
+			testTime = System.currentTimeMillis() - testTime;
+		}
+
+		// print out the max n values for fib1 and fib2
+		System.out.printf("| Maximum n-value for fib2 w/ runtime < 10ms: %-,20d|\n", fib2testVal);
+		System.out.println("|                                                                 |");
+		System.out.println("|=================================================================|\n");
 
 	}// end main
 }// end class
